@@ -5,8 +5,24 @@
  */
 import axios from 'axios';
 
+/**
+ * Normalize `VITE_API_URL` so both `https://backend.onrender.com` and
+ * `https://backend.onrender.com/api` resolve to `<origin>/api`, while an empty
+ * value preserves the Vite dev proxy `/api` default.
+ */
+export function resolveApiBaseUrl(rawUrl) {
+  const trimmed = typeof rawUrl === 'string' ? rawUrl.trim().replace(/\/+$/, '') : '';
+  if (!trimmed) return '/api';
+  return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+}
+
+const rawApiUrl =
+  typeof import.meta !== 'undefined' && import.meta.env
+    ? import.meta.env.VITE_API_URL
+    : undefined;
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: resolveApiBaseUrl(rawApiUrl),
   headers: { 'Content-Type': 'application/json' },
   timeout: 45000,
 });
