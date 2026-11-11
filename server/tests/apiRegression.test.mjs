@@ -67,6 +67,16 @@ async function runSuite(label, envOverrides) {
     const health = await waitForHealth(logs);
     assert.equal(health.status, 'healthy');
 
+    // 0. Root status endpoint
+    const rootRes = await fetch(`http://127.0.0.1:${PORT}/`);
+    assert.equal(rootRes.status, 200);
+    const rootJson = await rootRes.json();
+    assert.deepEqual(rootJson, {
+      success: true,
+      message: 'Dasceq API is running',
+      status: 'healthy',
+    });
+
     // 1. Welcome message & start
     const startRes = await api('POST', '/chat/start');
     assert.equal(startRes.status, 201);

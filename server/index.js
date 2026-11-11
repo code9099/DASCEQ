@@ -77,6 +77,15 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
+// ── Root Status Check ──
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Dasceq API is running',
+    status: 'healthy',
+  });
+});
+
 // ── Health / Readiness Check (zero secrets exposed) ──
 app.get('/api/health', (req, res) => {
   const persistence = getPersistenceStatus();
@@ -116,10 +125,10 @@ async function startServer() {
 
   await initDatabase();
 
-  const server = app.listen(config.port, () => {
+  const server = app.listen(config.port, '0.0.0.0', () => {
     const persistence = getPersistenceStatus();
     const aiInfo = getAiRuntimeStatus();
-    console.log(`\n🚀 ${companyProfile.name} Server running on port ${config.port}`);
+    console.log(`\n🚀 ${companyProfile.name} Server running on 0.0.0.0:${config.port}`);
     console.log(`📍 Environment: ${config.nodeEnv}`);
     console.log(`🤖 AI Mode: ${aiInfo.activeProvider} (${aiInfo.status})`);
     console.log(`💾 Persistence: ${persistence.mode} (${redactForLog(persistence.detail)})`);
