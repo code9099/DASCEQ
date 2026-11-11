@@ -1,0 +1,24 @@
+{
+  "name": "dasceq-server",
+  "version": "1.0.0",
+  "description": "Dasceq AI Customer Enquiry & Appointment Assistant - Backend",
+  "main": "index.js",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node tests/apiRegression.test.mjs && node tests/securityAndIntelligence.test.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "^3.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "mongoose": "^9.12.1",
+    "uuid": "^11.0.3"
+  }
+}
